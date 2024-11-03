@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             Container(
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 maxWidth: 350,
                 minWidth: 300,
               ),
