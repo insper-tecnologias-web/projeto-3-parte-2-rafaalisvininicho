@@ -29,7 +29,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
       allowedRoles: ['admin', 'user'],
       label: 'Home',
       routeBuilder: () => const HomeRoute(),
-      icon: const Icon(Icons.home, color: Color(0xffB0B0B0)),
+      icon: const Icon(Icons.home, color: grey),
       selectedIcon: const Icon(
         Icons.home,
         color: orange,
@@ -39,8 +39,15 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
       allowedRoles: ['admin', 'user'],
       label: 'Exercícios',
       routeBuilder: () => const ExercisesRoute(),
-      icon: const Icon(Icons.fitness_center, color: Color(0xffB0B0B0)),
+      icon: const Icon(Icons.fitness_center, color: grey),
       selectedIcon: const Icon(Icons.fitness_center, color: orange),
+    ),
+    (
+      allowedRoles: ['admin'],
+      label: 'Usuários',
+      routeBuilder: () => const UsersRoute(),
+      icon: const Icon(Icons.people, color: grey),
+      selectedIcon: const Icon(Icons.people, color: orange),
     ),
   ];
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
@@ -137,8 +144,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
                                 const SizedBox(width: 8),
                                 Text(
                                   page.label,
-                                  style:
-                                      const TextStyle(color: Color(0xffB0B0B0)),
+                                  style: const TextStyle(color: grey),
                                 ),
                               ],
                             ),

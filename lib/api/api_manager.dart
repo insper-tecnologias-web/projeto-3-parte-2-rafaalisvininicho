@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:projeto/api/models/model_user.dart';
 
 part 'apis/auth_api.dart';
+part 'apis/users_api.dart';
 
 class ApiManager extends ChangeNotifier {
   ApiManager._internal();
@@ -19,6 +20,21 @@ class ApiManager extends ChangeNotifier {
   bool _isAuthenticated = false; // Estado de autenticação
 
   bool get isAuthenticated => _isAuthenticated; // Getter para o estado
+
+  Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl$endpoint'),
+        headers: {
+          'Content-Type': 'application/json',
+          ...?headers,
+        },
+      );
+      return _handleResponse(response);
+    } catch (error) {
+      throw Exception('Erro na requisição GET: $error');
+    }
+  }
 
   Future<dynamic> post(String endpoint, dynamic body,
       {Map<String, String>? headers}) async {

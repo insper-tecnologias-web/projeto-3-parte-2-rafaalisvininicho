@@ -12,10 +12,12 @@ class ModelUser {
   });
 
   factory ModelUser.fromJson(Map<String, dynamic> json) {
+    print(json);
+    print(json['is_superuser']);
     return ModelUser(
       id: json['id'],
       username: json['username'],
-      role: json['role'],
+      role: json['is_superuser'] ? 'admin' : 'user',
       email: json['email'],
     );
   }

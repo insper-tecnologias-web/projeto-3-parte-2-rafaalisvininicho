@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto/widgets/pad_scaffold.dart';
 
 @RoutePage()
 class ExercisesPage extends StatelessWidget {
@@ -7,8 +8,10 @@ class ExercisesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder(
-      color: Colors.green,
+    return const PadScaffold(
+      child: Placeholder(
+        color: Colors.green,
+      ),
     );
   }
 }

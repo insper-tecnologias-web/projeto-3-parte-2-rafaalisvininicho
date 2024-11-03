@@ -13,3 +13,14 @@ class AuthGuard extends AutoRouteGuard {
     resolver.next(true);
   }
 }
+
+class AdminGuard extends AutoRouteGuard {
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) {
+    if (Hive.box("userData").get("role") != "admin") {
+      resolver.redirect(const HomeRoute());
+      return;
+    }
+    resolver.next(true);
+  }
+}

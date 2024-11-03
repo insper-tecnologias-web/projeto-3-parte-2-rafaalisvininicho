@@ -23,6 +23,10 @@ class AppRouter extends RootStackRouter {
                   page: ExercisesRoute.page,
                   path: 'exercises',
                   guards: [AuthGuard()]),
+              CustomRoute(
+                  page: UsersRoute.page,
+                  path: 'admin/users',
+                  guards: [AuthGuard(), AdminGuard()])
             ]),
         CustomRoute(page: LoginRoute.page, path: '/login'),
       ];
