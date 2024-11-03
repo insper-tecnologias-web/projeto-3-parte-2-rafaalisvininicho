@@ -72,98 +72,110 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
                       const ColorScheme.light(primary: Colors.transparent),
                   highlightColor: Colors.transparent,
                 ),
-                child: NavigationRail(
-                  groupAlignment: 0.0,
-                  useIndicator: false,
-                  minWidth: 224,
-                  leading: Container(
-                    constraints: const BoxConstraints(
-                      maxWidth: 224,
-                      minWidth: 224,
-                    ),
-                    child: const Image(
-                      image: AssetImage("images/nutrimove_logo.png"),
-                      fit: BoxFit.scaleDown,
-                    ),
-                  ).withPadding(const EdgeInsets.only(top: 64)),
-                  backgroundColor: Colors.white,
-                  selectedIndex: tabsRouter.activeIndex,
-                  onDestinationSelected: (index) {
-                    tabsRouter.setActiveIndex(index);
-                  },
-                  labelType: NavigationRailLabelType.all,
-                  destinations: _allowedPages.map((page) {
-                    final index = _allowedPages.indexOf(page);
-                    return NavigationRailDestination(
-                      icon: InkWell(
-                        onTap: () {
-                          tabsRouter.setActiveIndex(index);
-                        },
-                        splashColor: orange.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          constraints: const BoxConstraints(
-                            minWidth: 192,
-                            minHeight: 47,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(width: 16),
-                              page.icon,
-                              const SizedBox(width: 8),
-                              Text(
-                                page.label,
-                                style:
-                                    const TextStyle(color: Color(0xffB0B0B0)),
-                              ),
-                            ],
-                          ),
-                        ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: const Offset(
+                            4, 0), // deslocamento horizontal da sombra
+                        blurRadius: 8, // intensidade do desfoque
                       ),
-                      selectedIcon: InkWell(
-                        onTap: () {
-                          tabsRouter.setActiveIndex(index);
-                        },
-                        splashColor: orange.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          constraints: const BoxConstraints(
-                            minWidth: 192,
-                            minHeight: 47,
-                          ),
-                          decoration: BoxDecoration(
-                            color: green.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(width: 16),
-                              page.selectedIcon,
-                              const SizedBox(width: 8),
-                              Text(
-                                page.label,
-                                style: TextStyle(
-                                  color: tabsRouter.activeIndex == index
-                                      ? orange
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
+                    ],
+                  ),
+                  child: NavigationRail(
+                    groupAlignment: 0.0,
+                    useIndicator: false,
+                    minWidth: 224,
+                    leading: Container(
+                      constraints: const BoxConstraints(
+                        maxWidth: 224,
+                        minWidth: 224,
+                      ),
+                      child: const Image(
+                        image: AssetImage("images/nutrimove_logo.png"),
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ).withPadding(const EdgeInsets.only(top: 64)),
+                    backgroundColor: Colors.white,
+                    selectedIndex: tabsRouter.activeIndex,
+                    onDestinationSelected: (index) {
+                      tabsRouter.setActiveIndex(index);
+                    },
+                    labelType: NavigationRailLabelType.all,
+                    destinations: _allowedPages.map((page) {
+                      final index = _allowedPages.indexOf(page);
+                      return NavigationRailDestination(
+                        icon: InkWell(
+                          onTap: () {
+                            tabsRouter.setActiveIndex(index);
+                          },
+                          splashColor: orange.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            constraints: const BoxConstraints(
+                              minWidth: 192,
+                              minHeight: 47,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(width: 16),
+                                page.icon,
+                                const SizedBox(width: 8),
+                                Text(
+                                  page.label,
+                                  style:
+                                      const TextStyle(color: Color(0xffB0B0B0)),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      label: const Text(''),
-                    );
-                  }).toList(),
+                        selectedIcon: InkWell(
+                          onTap: () {
+                            tabsRouter.setActiveIndex(index);
+                          },
+                          splashColor: orange.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            constraints: const BoxConstraints(
+                              minWidth: 192,
+                              minHeight: 47,
+                            ),
+                            decoration: BoxDecoration(
+                              color: green.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(width: 16),
+                                page.selectedIcon,
+                                const SizedBox(width: 8),
+                                Text(
+                                  page.label,
+                                  style: TextStyle(
+                                    color: tabsRouter.activeIndex == index
+                                        ? orange
+                                        : Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        label: const Text(''),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
               const VerticalDivider(thickness: 1, width: 1),
