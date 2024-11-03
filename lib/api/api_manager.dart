@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ApiManager {
+import 'package:projeto/api/models/model_user.dart';
+
+part 'apis/auth_api.dart';
+
+class ApiManager extends ChangeNotifier {
+  ApiManager._internal();
+  static final ApiManager _instance = ApiManager._internal();
+  factory ApiManager() {
+    return _instance;
+  }
   final String _baseUrl = 'http://127.0.0.1:8000/';
   BuildContext? navigationContext;
-  Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/$endpoint'),
-        headers: headers,
-      );
-      return _handleResponse(response);
-    } catch (error) {
-      throw Exception('Erro na requisição GET: $error');
-    }
-  }
+
+  bool _isAuthenticated = false; // Estado de autenticação
+
+  bool get isAuthenticated => _isAuthenticated; // Getter para o estado
 
   Future<dynamic> post(String endpoint, dynamic body,
       {Map<String, String>? headers}) async {
     try {
+      endpoint = endpoint.replaceFirst(RegExp(r'^/'), '');
       final response = await http.post(
-        Uri.parse('$_baseUrl/$endpoint'),
+        Uri.parse('$_baseUrl$endpoint'),
         headers: {
           'Content-Type': 'application/json',
           ...?headers,

@@ -1,5 +1,8 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:projeto/api/api_manager.dart';
+import 'package:projeto/router.gr.dart';
 import 'package:projeto/validators.dart';
 
 @RoutePage()
@@ -12,6 +15,28 @@ class LoginPage extends StatelessWidget {
     final passwordController = TextEditingController();
     final key = GlobalKey<FormState>();
     final theme = Theme.of(context);
+
+    void _handleFormSubmmision() async {
+      TextInput.finishAutofillContext();
+      if (key.currentState!.validate()) {
+        try {
+          await ApiManager()
+              .login(emailController.text, passwordController.text)
+              .then((_) => {
+                    print("Login efetuado com sucesso"),
+                    context.router.replace(const HomeRoute())
+                  });
+        } catch (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erro ao fazer login: $error'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -67,9 +92,7 @@ class LoginPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 16.0),
                           FilledButton(
-                            onPressed: () {
-                              // Navigate to the home page
-                            },
+                            onPressed: _handleFormSubmmision,
                             child: Text(
                               'Entrar',
                               style: theme.textTheme.bodyMedium?.copyWith(

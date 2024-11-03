@@ -49,7 +49,14 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
 
   @override
   void initState() {
-    _allowedPages = _pages;
+    super.initState();
+    String? userRole = Hive.box('userData').get('role');
+    if (userRole == null) {
+      context.router.replace(const LoginRoute());
+    } else {
+      _allowedPages =
+          _pages.where((page) => page.allowedRoles.contains(userRole)).toList();
+    }
   }
 
   @override
