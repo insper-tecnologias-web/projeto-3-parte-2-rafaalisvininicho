@@ -29,7 +29,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
       allowedRoles: ['admin', 'user'],
       label: 'Home',
       routeBuilder: () => const HomeRoute(),
-      icon: const Icon(Icons.home),
+      icon: const Icon(Icons.home, color: Color(0xffB0B0B0)),
       selectedIcon: const Icon(
         Icons.home,
         color: orange,
@@ -39,7 +39,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
       allowedRoles: ['admin', 'user'],
       label: 'Exercícios',
       routeBuilder: () => const ExercisesRoute(),
-      icon: const Icon(Icons.fitness_center),
+      icon: const Icon(Icons.fitness_center, color: Color(0xffB0B0B0)),
       selectedIcon: const Icon(Icons.fitness_center, color: orange),
     ),
   ];
@@ -73,6 +73,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
                   highlightColor: Colors.transparent,
                 ),
                 child: NavigationRail(
+                  groupAlignment: 0.0,
                   useIndicator: false,
                   minWidth: 224,
                   leading: Container(
@@ -84,7 +85,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
                       image: AssetImage("images/nutrimove_logo.png"),
                       fit: BoxFit.scaleDown,
                     ),
-                  ).withPadding(const EdgeInsets.only(top: 16, bottom: 16)),
+                  ).withPadding(const EdgeInsets.only(top: 64)),
                   backgroundColor: Colors.white,
                   selectedIndex: tabsRouter.activeIndex,
                   onDestinationSelected: (index) {
@@ -116,7 +117,11 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
                               const SizedBox(width: 16),
                               page.icon,
                               const SizedBox(width: 8),
-                              Text(page.label),
+                              Text(
+                                page.label,
+                                style:
+                                    const TextStyle(color: Color(0xffB0B0B0)),
+                              ),
                             ],
                           ),
                         ),
