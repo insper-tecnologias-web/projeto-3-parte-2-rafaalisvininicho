@@ -20,6 +20,7 @@ extension UsersApi on ApiManager {
   Future<dynamic> createUser(
       String username, String email, String password, String role) async {
     try {
+      username = utf8.encode(username).toString();
       final response = await post('auth/register/', {
         'username': username,
         'email': email,
@@ -34,6 +35,7 @@ extension UsersApi on ApiManager {
 
   Future<dynamic> updateUser(
       int id, String username, String email, String role) async {
+    username = utf8.encode(username).toString();
     try {
       final response = await put('auth/users/edit/$id/', {
         'username': username,

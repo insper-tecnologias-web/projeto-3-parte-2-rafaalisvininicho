@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class ModelUser {
   final int id;
   final String username;
@@ -16,7 +18,7 @@ class ModelUser {
     print(json['is_superuser']);
     return ModelUser(
       id: json['id'],
-      username: json['username'],
+      username: utf8.decode(json['username'].codeUnits),
       role: json['is_superuser'] ? 'admin' : 'user',
       email: json['email'],
     );
