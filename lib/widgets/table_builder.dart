@@ -51,24 +51,8 @@ class TableBuilder extends StatelessWidget {
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: <TableRow>[
               TableRow(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(
-                    color: const Color.fromARGB(190, 0, 0, 0),
-                  ),
-                  borderRadius: const SmoothBorderRadius.all(
-                    SmoothRadius(
-                      cornerRadius: 8.0,
-                      cornerSmoothing: 0.6,
-                    ),
-                  ),
-                  boxShadow: const <BoxShadow>[
-                    BoxShadow(
-                      color: Color.fromARGB(24, 0, 0, 0),
-                      offset: Offset(0.0, 4.0),
-                      blurRadius: 20.0,
-                    ),
-                  ],
                 ),
                 children: <Widget>[
                   for (var row in headerRow)
