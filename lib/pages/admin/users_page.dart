@@ -58,6 +58,10 @@ class _UsersPageState extends State<UsersPage> {
                             const WidgetStatePropertyAll(Size(200, 50)),
                         backgroundColor: const WidgetStatePropertyAll(green)),
                     onPressed: () async {
+                      _nameController.clear();
+                      _emailController.clear();
+                      _passwordController.clear();
+                      _roleController.clear();
                       await showPopUp(context,
                           title: 'Adicionar Usuário',
                           content: [
@@ -118,10 +122,6 @@ class _UsersPageState extends State<UsersPage> {
                             _roleController.text);
 
                         if (response != null) {
-                          _nameController.clear();
-                          _emailController.clear();
-                          _passwordController.clear();
-                          _roleController.clear();
                           context.successSnackBar('Usuário criado com sucesso');
                           final updatedUsers = await ApiManager().getUsers();
                           setState(() {
