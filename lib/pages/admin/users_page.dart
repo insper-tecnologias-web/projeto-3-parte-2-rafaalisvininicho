@@ -144,20 +144,17 @@ class _UsersPageState extends State<UsersPage> {
                       children: [
                         Text(
                           user.username,
-                          textAlign: TextAlign.center,
                         ),
                         Text(
                           user.email,
-                          textAlign: TextAlign.center,
                         ),
                         Text(
                           user.role == 'admin' ? 'Administrador' : 'Usuário',
-                          textAlign: TextAlign.center,
                           style: TextStyle(
                               color: user.role == 'admin' ? orange : green),
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
@@ -257,7 +254,8 @@ class _UsersPageState extends State<UsersPage> {
                                     if (response != null) {
                                       final updatedUsers =
                                           await ApiManager().getUsers();
-                                      context.successSnackBar("Usuário deletado com sucesso");
+                                      context.successSnackBar(
+                                          "Usuário deletado com sucesso");
                                       setState(() {
                                         dataUsers = Future.value(updatedUsers);
                                       });
@@ -272,9 +270,9 @@ class _UsersPageState extends State<UsersPage> {
                   },
                   rowCount: users.length,
                   columnWidths: const {
-                    0: FlexColumnWidth(1),
-                    1: FlexColumnWidth(1),
-                    2: FlexColumnWidth(1),
+                    0: FlexColumnWidth(2),
+                    1: FlexColumnWidth(2),
+                    2: FlexColumnWidth(2),
                     3: FlexColumnWidth(1)
                   }).withPadding(
                 const EdgeInsets.all(16),

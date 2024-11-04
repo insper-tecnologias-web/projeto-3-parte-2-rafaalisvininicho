@@ -1,5 +1,6 @@
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto/colors.dart';
 import 'package:projeto/extensions.dart';
 
 class TableBuilder extends StatelessWidget {
@@ -9,7 +10,7 @@ class TableBuilder extends StatelessWidget {
       required this.rowBuilder,
       required this.rowCount,
       this.headerGap = 8.0,
-      this.rowGap = 8.0,
+      this.rowGap = 15.0,
       required this.columnWidths});
 
   final List<String> headerRow;
@@ -56,22 +57,31 @@ class TableBuilder extends StatelessWidget {
                 ),
                 children: <Widget>[
                   for (var row in headerRow)
-                    Center(
-                        child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 20.0,
+                        bottom: 20,
+                      ),
                       child: Text(
                         row,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
+                              color: grey,
                             ),
+                      ).withPadding(
+                        row != headerRow.last
+                            ? const EdgeInsets.only(left: 0.0)
+                            : const EdgeInsets.only(left: 8.0),
                       ),
-                    )),
+                    )
                 ],
               ),
               TableRow(children: [
-                for (var _ in headerRow) SizedBox(height: headerGap)
+                for (var _ in headerRow)
+                  SizedBox(
+                    height: headerGap,
+                  )
               ]),
               ...buildTableRows(context),
             ],
@@ -88,7 +98,16 @@ class TableBuilder extends StatelessWidget {
         2 * rowCount,
         (int index) => index % 2 == 0
             ? rowBuilder(context, index ~/ 2)
-            : TableRow(
-                children: [for (var _ in headerRow) SizedBox(height: rowGap)]));
+            : TableRow(children: [
+                for (var _ in headerRow)
+                  SizedBox(
+                    height: rowGap,
+                    child: Divider(
+                      color: grey.withOpacity(0.3),
+                      height: 1.0,
+                      thickness: 1.0,
+                    ),
+                  )
+              ]));
   }
 }
