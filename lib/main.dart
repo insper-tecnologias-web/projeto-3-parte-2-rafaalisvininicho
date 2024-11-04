@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:projeto/colors.dart';
 import 'package:projeto/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  usePathUrlStrategy();
   await Hive.initFlutter();
-
-  // Abra a caixa aqui
   await Hive.openBox('userData');
   runApp(MyApp());
 }
