@@ -58,7 +58,7 @@ class ApiManager extends ChangeNotifier {
       {Map<String, String>? headers}) async {
     try {
       final response = await http.put(
-        Uri.parse('$_baseUrl/$endpoint'),
+        Uri.parse('$_baseUrl$endpoint'),
         headers: {
           'Content-Type': 'application/json',
           ...?headers,
@@ -75,7 +75,7 @@ class ApiManager extends ChangeNotifier {
       {Map<String, String>? headers}) async {
     try {
       final response = await http.delete(
-        Uri.parse('$_baseUrl/$endpoint'),
+        Uri.parse('$_baseUrl$endpoint'),
         headers: {
           'Content-Type': 'application/json',
           ...?headers,

@@ -28,4 +28,5 @@ extension AuthApi on ApiManager {
     _isAuthenticated = false; // Atualiza o estado de autenticação
     // Notifica os ouvintes sobre a mudança de estado
   }
+  
 }

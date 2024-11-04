@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projeto/api/api_manager.dart';
+import 'package:projeto/extensions.dart';
 import 'package:projeto/router.gr.dart';
 import 'package:projeto/validators.dart';
 
@@ -23,16 +24,11 @@ class LoginPage extends StatelessWidget {
           await ApiManager()
               .login(emailController.text, passwordController.text)
               .then((_) => {
-                    print("Login efetuado com sucesso"),
+                    context.successSnackBar('Login realizado com sucesso!'),
                     context.router.replace(const HomeRoute())
                   });
         } catch (error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Erro ao fazer login: $error'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          context.errorSnackBar('Erro ao fazer login', description: error.toString());
         }
       }
     }

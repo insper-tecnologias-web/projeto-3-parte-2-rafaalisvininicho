@@ -35,7 +35,7 @@ extension UsersApi on ApiManager {
   Future<dynamic> updateUser(
       int id, String username, String email, String role) async {
     try {
-      final response = await put('users/$id/', {
+      final response = await put('auth/users/edit/$id/', {
         'username': username,
         'email': email,
         'role': role,
@@ -48,7 +48,7 @@ extension UsersApi on ApiManager {
 
   Future<dynamic> deleteUser(int id) async {
     try {
-      final response = await delete('users/$id/');
+      final response = await delete('auth/users/delete/$id/');
       return response;
     } catch (error) {
       throw Exception('Erro ao deletar usuário: $error');
