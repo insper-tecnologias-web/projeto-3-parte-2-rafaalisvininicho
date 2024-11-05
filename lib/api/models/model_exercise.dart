@@ -9,6 +9,8 @@ class ModelTrainingPlan {
   final String seoTitle;
   final String seoContent;
   final String seoKeywords;
+  final DateTime startDate;
+  final DateTime endDate;
 
   ModelTrainingPlan({
     required this.goal,
@@ -19,6 +21,8 @@ class ModelTrainingPlan {
     required this.seoTitle,
     required this.seoContent,
     required this.seoKeywords,
+    required this.startDate,
+    required this.endDate,
   });
 
   factory ModelTrainingPlan.fromJson(Map<String, dynamic> json) {
@@ -34,6 +38,8 @@ class ModelTrainingPlan {
       seoTitle: utf8.decode(json['seo_title'].toString().codeUnits),
       seoContent: utf8.decode(json['seo_content'].toString().codeUnits),
       seoKeywords: utf8.decode(json['seo_keywords'].toString().codeUnits),
+      startDate: DateTime.parse(json['start_date']),
+      endDate: DateTime.parse(json['end_date']),
     );
   }
 
