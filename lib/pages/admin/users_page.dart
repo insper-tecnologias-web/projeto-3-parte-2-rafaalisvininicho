@@ -136,7 +136,7 @@ class _UsersPageState extends State<UsersPage> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     )),
               ),
-              child: TableBuilder(
+              body: TableBuilder(
                   headerRow: const ['Nome', 'Email', 'Role', 'Ações'],
                   rowBuilder: (context, index) {
                     final user = users[index];

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:projeto/api/models/model_exercise.dart';
 import 'dart:convert';
 
 import 'package:projeto/api/models/model_user.dart';
 
 part 'apis/auth_api.dart';
 part 'apis/users_api.dart';
+part 'apis/exercises_api.dart';
 
 class ApiManager extends ChangeNotifier {
   ApiManager._internal();

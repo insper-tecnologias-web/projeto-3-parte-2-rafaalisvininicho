@@ -6,11 +6,11 @@ import 'package:projeto/extensions.dart';
 class PadScaffold extends StatelessWidget {
   const PadScaffold(
       {super.key,
-      required this.child,
+      required this.body,
       this.title = "",
       this.subtitle = "",
       this.actions});
-  final Widget child;
+  final Widget body;
   final String title;
   final String subtitle;
   final Widget? actions;
@@ -48,7 +48,7 @@ class PadScaffold extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
                 ),
                 Expanded(
-                  child: child,
+                  child: body,
                 ),
               ],
             ),

@@ -8,6 +8,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PadScaffold(child: Placeholder());
+    return const PadScaffold(body: Placeholder());
   }
 }
