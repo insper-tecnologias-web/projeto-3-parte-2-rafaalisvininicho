@@ -19,11 +19,12 @@ extension ExercisesApi on ApiManager {
         'fitness_level': fitnessLevel,
         'health_conditions': healthConditions,
         'preferences': preferences,
-        'days_per_week': daysPerWeek,
-        'session_duration': sessionDuration,
+        'schedule': {
+          'days_per_week': daysPerWeek,
+          'session_duration': sessionDuration,
+        },
         'plan_duration_weeks': planDurationWeeks,
         'custom_goals': customGoals,
-        'lang': 'pt-Br',
       });
       final ModelTrainingPlan trainingPlan =
           ModelTrainingPlan.fromJson(response);
