@@ -16,10 +16,21 @@ class ModelUser {
   factory ModelUser.fromJson(Map<String, dynamic> json) {
     print(json);
     print(json['is_superuser']);
+    final role = json['role'];
+    json = json['user'];
     return ModelUser(
       id: json['id'],
       username: utf8.decode(json['username'].codeUnits),
-      role: json['is_superuser'] ? 'admin' : 'user',
+      role: role,
+      email: json['email'],
+    );
+  }
+  factory ModelUser.fromLoginJson(Map<String, dynamic> json) {
+    print(json);
+    return ModelUser(
+      id: json['id'],
+      username: utf8.decode(json['username'].codeUnits),
+      role: json["role"],
       email: json['email'],
     );
   }

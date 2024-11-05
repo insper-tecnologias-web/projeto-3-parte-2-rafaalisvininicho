@@ -40,7 +40,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   Text(data.goal),
                   Text(data.schedule.daysPerWeek.toString()),
                   Text(data.seoTitle),
-                  for (final exercise in data.exercises)
+                  for (final exercise in data.exercises?? [])
                     Text(exercise.exercises.first.name),
                 ],
               );

@@ -10,7 +10,8 @@ extension AuthApi on ApiManager {
       });
       _isAuthenticated = true;
       print(response);
-      final user = ModelUser.fromJson(response);
+      print("Login realizado com sucesso!");
+      final user = ModelUser.fromLoginJson(response);
       print(user.toJson());
       Hive.box('userData').put('id', user.id);
       Hive.box('userData').put('username', user.username);
