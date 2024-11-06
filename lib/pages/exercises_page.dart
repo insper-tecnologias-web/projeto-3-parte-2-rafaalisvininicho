@@ -19,11 +19,12 @@ class ExercisesPage extends StatefulWidget {
 }
 
 class _ExercisesPageState extends State<ExercisesPage> {
-  Future<ModelTrainingPlan>? dataTrainingPlan;
-  ExercisesState exercisesState = ExercisesState.withoutTrain;
+  Future<ModelTrainingPlan?>? dataTrainingPlan;
+  ExercisesState exercisesState = ExercisesState.withTrain;
   DateTime? startOfWeek;
   DateTime? endOfWeek;
   bool isLoading = false;
+  String selectedDay = "Domingo";
 
   @override
   void initState() {
@@ -37,8 +38,9 @@ class _ExercisesPageState extends State<ExercisesPage> {
   Widget build(BuildContext context) {
     return PadScaffold(
       title: "Exercícios",
-      body: FutureBuilder<ModelTrainingPlan>(
-        future: dataTrainingPlan,
+      body: FutureBuilder<ModelTrainingPlan?>(
+        future: dataTrainingPlan ??=
+            ApiManager().getWeekTrainingPlan(startOfWeek!, endOfWeek!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -53,33 +55,86 @@ class _ExercisesPageState extends State<ExercisesPage> {
           }
           final trainingPlan = snapshot.data;
           if (trainingPlan == null || trainingPlan.exercises.isEmpty) {
+            exercisesState = ExercisesState.withoutTrain;
             return Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                        onPressed: () async {
+                          if (startOfWeek!.isBefore(DateTime.now())) {
+                            context.warningSnackBar(
+                                "Não é possível voltar no tempo!");
+                            return;
+                          }
+
+                          setState(() {
+                            startOfWeek =
+                                startOfWeek!.subtract(const Duration(days: 7));
+                            endOfWeek =
+                                endOfWeek!.subtract(const Duration(days: 7));
+                            dataTrainingPlan = ApiManager()
+                                .getWeekTrainingPlan(startOfWeek!, endOfWeek!);
+                          });
+                        },
+                        icon: const Icon(Icons.arrow_back_ios)),
+                    RichText(
+                        text: TextSpan(
+                      text: DateFormat('dd/MM').format(startOfWeek!),
+                      style: const TextStyle(color: Colors.black, fontSize: 20),
+                      children: [
+                        const TextSpan(
+                          text: " - ",
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                        TextSpan(
+                          text: DateFormat('dd/MM').format(endOfWeek!),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 20),
+                        ),
+                      ],
+                    )),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            startOfWeek =
+                                startOfWeek!.add(const Duration(days: 7));
+                            endOfWeek = endOfWeek!.add(const Duration(days: 7));
+                            dataTrainingPlan = ApiManager()
+                                .getWeekTrainingPlan(startOfWeek!, endOfWeek!);
+                          });
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios)),
+                  ],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CupertinoSlidingSegmentedControl<String>(
+                        groupValue: selectedDay,
                         backgroundColor: Colors.white,
                         thumbColor: green,
                         children: const {
-                          'sunday': Text('Dom'),
-                          'monday': Text('Seg'),
-                          'tuesday': Text('Ter'),
-                          'wednesday': Text('Qua'),
-                          'thursday': Text('Qui'),
-                          'friday': Text("Sex"),
-                          'saturday': Text("Sáb")
+                          'Domingo': Text('Dom'),
+                          'Segunda-feira': Text('Seg'),
+                          'Terça-feira': Text('Ter'),
+                          'Quarta-feira': Text('Qua'),
+                          'Quinta-feira': Text('Qui'),
+                          'Sexta-feira': Text("Sex"),
+                          'Sábado': Text("Sáb")
                         },
-                        onValueChanged: (int) {
-                          print(int);
+                        onValueChanged: (day) {
+                          setState(() {
+                            selectedDay = day!;
+                          });
                         }),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: _getActionsButtons(),
                     )
                   ],
-                ).withPadding(
-                    const EdgeInsets.symmetric(vertical: 40, horizontal: 20)),
+                ),
                 Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -112,7 +167,6 @@ class _ExercisesPageState extends State<ExercisesPage> {
                             final response = await showBuildWeekTrainDialog(
                                 context, onConfirmed: (response) async {
                               try {
-                                print(response);
                                 final trainingPlan =
                                     await ApiManager().generateCustomTrainWeek(
                                   response['goal'],
@@ -167,7 +221,10 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   ),
                 ),
               ],
-            );
+            ).withPadding(const EdgeInsets.symmetric(horizontal: 20));
+          }
+          if (isLoading) {
+            return const Center(child: CircularProgressIndicator());
           }
           final List<String> headerRow = [
             "Exercício",
@@ -176,53 +233,210 @@ class _ExercisesPageState extends State<ExercisesPage> {
             "Carga",
             "Descanso"
           ];
-          final List<ModelExercise> list =
-              trainingPlan.exercises.first.exercises;
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CupertinoSlidingSegmentedControl<String>(
-                      children: const {
-                        'sunday': Text('Dom'),
-                        'monday': Text('Seg'),
-                        'tuesday': Text('Ter'),
-                        'wednesday': Text('Qua'),
-                        'thursday': Text('Qui'),
-                        'friday': Text("Sex"),
-                        'saturday': Text("Sáb")
-                      },
-                      onValueChanged: (int) {
-                        print(int);
-                      }),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: _getActionsButtons(),
-                  ),
-                ],
-              ),
-              TableBuilder(
-                  headerRow: headerRow,
-                  rowBuilder: (context, index) {
-                    final exercise = list[index];
-                    return TableRow(children: [
-                      Text(exercise.name),
-                      Text(exercise.sets ?? ""),
-                      Text(exercise.repetitions ?? ""),
-                      Text(exercise.equipment),
-                      Text(exercise.duration),
-                    ]);
-                  },
-                  rowCount: list.length,
-                  columnWidths: const {
-                    0: FlexColumnWidth(2),
-                    1: FlexColumnWidth(1),
-                    2: FlexColumnWidth(1),
-                    3: FlexColumnWidth(1),
-                    4: FlexColumnWidth(1),
-                  })
-            ],
+          if (exercisesState != ExercisesState.generatingTrain) {
+            exercisesState = ExercisesState.withTrain;
+          } else {}
+          final List<ModelExerciseDay> dayList = trainingPlan.exercises
+              .where((day) => day.day == selectedDay)
+              .toList();
+
+          if (dayList.isEmpty && exercisesState == ExercisesState.withTrain) {
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          if (startOfWeek!.isBefore(DateTime.now())) {
+                            context.warningSnackBar(
+                                "Não é possível voltar no tempo!");
+                            return;
+                          }
+                          setState(() {
+                            startOfWeek =
+                                startOfWeek!.subtract(const Duration(days: 7));
+                            endOfWeek =
+                                endOfWeek!.subtract(const Duration(days: 7));
+                            dataTrainingPlan = ApiManager()
+                                .getWeekTrainingPlan(startOfWeek!, endOfWeek!);
+                          });
+                        },
+                        icon: const Icon(Icons.arrow_back_ios)),
+                    RichText(
+                        text: TextSpan(
+                      text: DateFormat('dd/MM').format(startOfWeek!),
+                      style: const TextStyle(color: Colors.black, fontSize: 20),
+                      children: [
+                        const TextSpan(
+                          text: " - ",
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                        TextSpan(
+                          text: DateFormat('dd/MM').format(endOfWeek!),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 20),
+                        ),
+                      ],
+                    )),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            startOfWeek =
+                                startOfWeek!.add(const Duration(days: 7));
+                            endOfWeek = endOfWeek!.add(const Duration(days: 7));
+                            dataTrainingPlan = ApiManager()
+                                .getWeekTrainingPlan(startOfWeek!, endOfWeek!);
+                          });
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios)),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CupertinoSlidingSegmentedControl<String>(
+                        groupValue: selectedDay,
+                        backgroundColor: Colors.white,
+                        thumbColor: green,
+                        children: const {
+                          'Domingo': Text('Dom'),
+                          'Segunda-feira': Text('Seg'),
+                          'Terça-feira': Text('Ter'),
+                          'Quarta-feira': Text('Qua'),
+                          'Quinta-feira': Text('Qui'),
+                          'Sexta-feira': Text("Sex"),
+                          'Sábado': Text("Sáb")
+                        },
+                        onValueChanged: (day) {
+                          setState(() {
+                            selectedDay = day!;
+                          });
+                        }),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _getActionsButtons(),
+                    ),
+                  ],
+                ),
+                const Center(
+                  child: Text("Nenhum Treino hoje"),
+                )
+              ],
+            ).withPadding(const EdgeInsets.symmetric(horizontal: 20));
+          }
+          late List<ModelExercise> list;
+          if (exercisesState == ExercisesState.generatingTrain) {
+            list = [];
+            for (final day in trainingPlan.exercises) {
+              list.addAll(day.exercises);
+            }
+          } else {
+            list = dayList.first.exercises;
+          }
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          if (startOfWeek!.isBefore(DateTime.now())) {
+                            context.warningSnackBar(
+                                "Não é possível voltar no tempo!");
+                            return;
+                          }
+
+                          setState(() {
+                            startOfWeek =
+                                startOfWeek!.subtract(const Duration(days: 7));
+                            endOfWeek =
+                                endOfWeek!.subtract(const Duration(days: 7));
+                            dataTrainingPlan = ApiManager()
+                                .getWeekTrainingPlan(startOfWeek!, endOfWeek!);
+                          });
+                        },
+                        icon: const Icon(Icons.arrow_back_ios)),
+                    RichText(
+                        text: TextSpan(
+                      text: DateFormat('dd/MM').format(startOfWeek!),
+                      style: const TextStyle(color: Colors.black, fontSize: 20),
+                      children: [
+                        const TextSpan(
+                          text: " - ",
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                        TextSpan(
+                          text: DateFormat('dd/MM').format(endOfWeek!),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 20),
+                        ),
+                      ],
+                    )),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            startOfWeek =
+                                startOfWeek!.add(const Duration(days: 7));
+                            endOfWeek = endOfWeek!.add(const Duration(days: 7));
+                            dataTrainingPlan = ApiManager()
+                                .getWeekTrainingPlan(startOfWeek!, endOfWeek!);
+                          });
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios)),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CupertinoSlidingSegmentedControl<String>(
+                        groupValue: selectedDay,
+                        backgroundColor: Colors.white,
+                        thumbColor: green,
+                        children: const {
+                          'Domingo': Text('Dom'),
+                          'Segunda-feira': Text('Seg'),
+                          'Terça-feira': Text('Ter'),
+                          'Quarta-feira': Text('Qua'),
+                          'Quinta-feira': Text('Qui'),
+                          'Sexta-feira': Text("Sex"),
+                          'Sábado': Text("Sáb")
+                        },
+                        onValueChanged: (day) {
+                          setState(() {
+                            selectedDay = day!;
+                          });
+                        }),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _getActionsButtons(),
+                    ),
+                  ],
+                ),
+                TableBuilder(
+                    headerRow: headerRow,
+                    rowBuilder: (context, index) {
+                      final exercise = list[index];
+                      return TableRow(children: [
+                        Text(exercise.name),
+                        Text(exercise.sets ?? ""),
+                        Text(exercise.repetitions ?? ""),
+                        Text(exercise.equipment),
+                        Text(exercise.duration),
+                      ]);
+                    },
+                    rowCount: list.length,
+                    columnWidths: const {
+                      0: FlexColumnWidth(2),
+                      1: FlexColumnWidth(1),
+                      2: FlexColumnWidth(1),
+                      3: FlexColumnWidth(1),
+                      4: FlexColumnWidth(1),
+                    })
+              ],
+            ).withPadding(const EdgeInsets.symmetric(horizontal: 20)),
           );
         },
       ),
@@ -288,12 +502,15 @@ class _ExercisesPageState extends State<ExercisesPage> {
                     'end_date': endOfWeek?.toIso8601String(),
                   };
                   print(trainingPlanWithDates);
-                  await ApiManager().saveTrainingPlan(
-                      ModelTrainingPlan.fromCreateJson(trainingPlanWithDates));
+                  try {} catch (e) {
+                    print("FUDEU");
+                  }
+                  await ApiManager().saveTrainingPlan(trainingPlanWithDates);
                   context.successSnackBar("Treino salvo com sucesso!");
                   setState(() {
                     exercisesState = ExercisesState.withTrain;
-                    dataTrainingPlan = null;
+                    dataTrainingPlan = ApiManager()
+                        .getWeekTrainingPlan(startOfWeek!, endOfWeek!);
                   });
                 } catch (e) {
                   context.errorSnackBar("Erro ao salvar treino: $e");

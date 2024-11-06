@@ -42,8 +42,9 @@ extension ExercisesApi on ApiManager {
     }
   }
 
-  Future<ModelTrainingPlan> getWeekTrainingPlan(
+  Future<ModelTrainingPlan?> getWeekTrainingPlan(
       DateTime startDate, DateTime endDate) async {
+        print("Olá");
     try {
       final response = await post(
         'exercises/week/',
@@ -52,19 +53,20 @@ extension ExercisesApi on ApiManager {
           'end_date': endDate.toIso8601String(),
         },
       );
-      final ModelTrainingPlan trainingPlan =
-          ModelTrainingPlan.fromJson(response);
-      return trainingPlan;
+      return ModelTrainingPlan.fromJson(response);
     } catch (error) {
+      if (error.toString().contains("No training plan found")) {
+        return null;
+      }
       throw Exception('Erro ao buscar treino: $error');
     }
   }
 
-  Future<void> saveTrainingPlan(ModelTrainingPlan trainingPlan) async {
-    print(trainingPlan.toCreateJson());
+  Future<void> saveTrainingPlan(trainingPlan) async {
     try {
-      await post('exercises/save/', trainingPlan.toCreateJson());
-    } catch (error) {
+      await post('exercises/save/', trainingPlan);
+    } catch (error, stackTrace) {
+      print('StackTrace: $stackTrace');
       throw Exception('Erro ao salvar treino: $error');
     }
   }

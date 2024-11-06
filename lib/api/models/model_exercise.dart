@@ -44,7 +44,6 @@ class ModelTrainingPlan {
   }
 
   factory ModelTrainingPlan.fromCreateJson(Map<String, dynamic> json) {
-    json = json['result'];
     return ModelTrainingPlan(
       goal: utf8.decode(json['goal'].toString().codeUnits),
       fitnessLevel: utf8.decode(json['fitness_level'].toString().codeUnits),
