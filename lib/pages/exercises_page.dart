@@ -23,6 +23,8 @@ class _ExercisesPageState extends State<ExercisesPage> {
   ExercisesState exercisesState = ExercisesState.withoutTrain;
   DateTime? startOfWeek;
   DateTime? endOfWeek;
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -104,25 +106,37 @@ class _ExercisesPageState extends State<ExercisesPage> {
                               backgroundColor:
                                   const WidgetStatePropertyAll(green)),
                           onPressed: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
                             final response = await showBuildWeekTrainDialog(
                                 context, onConfirmed: (response) async {
                               try {
-                                final trainingPlan = await ApiManager()
-                                    .generateCustomTrainWeek(
-                                        response['goal'],
-                                        response['fitnessLevel'],
-                                        response['healthConditions'],
-                                        response['preferences'],
-                                        response['daysPerWeek'],
-                                        response['sessionDuration'],
-                                        response['planDurationWeeks'],
-                                        response['customGoals']);
+                                print(response);
+                                final trainingPlan =
+                                    await ApiManager().generateCustomTrainWeek(
+                                  response['goal'],
+                                  response['fitnessLevel'],
+                                  response['healthConditionsString'],
+                                  response['preferencesString'],
+                                  response['daysPerWeek'],
+                                  response['sessionDuration'],
+                                  response['planDurationWeeks'],
+                                  response['customGoalsString'],
+                                );
+
                                 setState(() {
                                   dataTrainingPlan = Future.value(trainingPlan);
+                                  exercisesState =
+                                      ExercisesState.generatingTrain;
+                                  isLoading = false;
                                 });
                               } catch (e) {
                                 context
                                     .errorSnackBar("Erro ao gerar treino: $e");
+                                setState(() {
+                                  isLoading = false;
+                                });
                               }
                             });
                             if (response != null) {
@@ -194,8 +208,8 @@ class _ExercisesPageState extends State<ExercisesPage> {
                     final exercise = list[index];
                     return TableRow(children: [
                       Text(exercise.name),
-                      Text(exercise.sets),
-                      Text(exercise.repetitions),
+                      Text(exercise.sets ?? ""),
+                      Text(exercise.repetitions ?? ""),
                       Text(exercise.equipment),
                       Text(exercise.duration),
                     ]);
@@ -265,7 +279,26 @@ class _ExercisesPageState extends State<ExercisesPage> {
                       borderRadius: BorderRadius.circular(10))),
                   maximumSize: const WidgetStatePropertyAll(Size(200, 50)),
                   backgroundColor: const WidgetStatePropertyAll(orange)),
-              onPressed: () {},
+              onPressed: () async {
+                final trainingPlan = await dataTrainingPlan;
+                try {
+                  final trainingPlanWithDates = {
+                    ...trainingPlan!.toJson(),
+                    'start_date': startOfWeek?.toIso8601String(),
+                    'end_date': endOfWeek?.toIso8601String(),
+                  };
+                  print(trainingPlanWithDates);
+                  await ApiManager().saveTrainingPlan(
+                      ModelTrainingPlan.fromCreateJson(trainingPlanWithDates));
+                  context.successSnackBar("Treino salvo com sucesso!");
+                  setState(() {
+                    exercisesState = ExercisesState.withTrain;
+                    dataTrainingPlan = null;
+                  });
+                } catch (e) {
+                  context.errorSnackBar("Erro ao salvar treino: $e");
+                }
+              },
               child: const Text(
                 "+ Salvar",
                 style:

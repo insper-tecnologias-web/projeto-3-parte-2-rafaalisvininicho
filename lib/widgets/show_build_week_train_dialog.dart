@@ -7,6 +7,9 @@ Future<dynamic> showBuildWeekTrainDialog(BuildContext context,
   final _focusController = TextEditingController();
   final _problemaController = TextEditingController();
   final _customGoalsController = TextEditingController();
+  final _daysPerWeekController = TextEditingController();
+  final _sessionDurationController = TextEditingController();
+  final _intensityController = TextEditingController();
 
   return showPopUp(
     context,
@@ -118,7 +121,9 @@ Future<dynamic> showBuildWeekTrainDialog(BuildContext context,
                       DropdownMenuItem(value: '2', child: Text('2')),
                       DropdownMenuItem(value: '3', child: Text('3')),
                     ],
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _daysPerWeekController.text = value!;
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -132,7 +137,9 @@ Future<dynamic> showBuildWeekTrainDialog(BuildContext context,
                       DropdownMenuItem(value: '2', child: Text('2h')),
                       DropdownMenuItem(value: '3', child: Text('3h')),
                     ],
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _sessionDurationController.text = value!;
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -146,7 +153,9 @@ Future<dynamic> showBuildWeekTrainDialog(BuildContext context,
                       DropdownMenuItem(value: 'Médio', child: Text('Média')),
                       DropdownMenuItem(value: 'Difícil', child: Text('Alta')),
                     ],
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _intensityController.text = value!;
+                    },
                   ),
                 ),
               ],

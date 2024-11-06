@@ -56,7 +56,16 @@ extension ExercisesApi on ApiManager {
           ModelTrainingPlan.fromJson(response);
       return trainingPlan;
     } catch (error) {
-      throw Exception('Erro ao buscar treino da semana: $error');
+      throw Exception('Erro ao buscar treino: $error');
+    }
+  }
+
+  Future<void> saveTrainingPlan(ModelTrainingPlan trainingPlan) async {
+    print(trainingPlan.toCreateJson());
+    try {
+      await post('exercises/save/', trainingPlan.toCreateJson());
+    } catch (error) {
+      throw Exception('Erro ao salvar treino: $error');
     }
   }
 }
