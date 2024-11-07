@@ -44,7 +44,7 @@ extension ExercisesApi on ApiManager {
 
   Future<ModelTrainingPlan?> getWeekTrainingPlan(
       DateTime startDate, DateTime endDate) async {
-        print("Olá");
+    print("Olá");
     try {
       final response = await post(
         'exercises/week/',
@@ -69,6 +69,25 @@ extension ExercisesApi on ApiManager {
     } catch (error, stackTrace) {
       print('StackTrace: $stackTrace');
       throw Exception('Erro ao salvar treino: $error');
+    }
+  }
+
+  Future<void> importTraininPlan(DateTime startDate, DateTime endDate) async {
+    try {
+      await post('exercises/import/', {
+        'user_id': Hive.box('userData').get('id'),
+        'start_date': startDate.toIso8601String(),
+        'end_date': endDate.toIso8601String(),
+      });
+    } catch (error) {
+      throw Exception('Erro ao importar treino: $error');
+    }
+  }
+  Future<void> updateTrainingPlan(trainingPlan) async {
+    try {
+      await put('exercises/update/', trainingPlan);
+    } catch (error) {
+      throw Exception('Erro ao atualizar treino: $error');
     }
   }
 }

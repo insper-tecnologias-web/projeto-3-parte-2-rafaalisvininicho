@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -229,7 +227,23 @@ class _ExercisesPageState extends State<ExercisesPage> {
                                             BorderRadius.circular(10)),
                                     fixedSize: const Size(245, 62),
                                     side: const BorderSide(color: orange)),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  try {
+                                    final reponse =
+                                        await ApiManager().importTraininPlan(
+                                      startOfWeek!,
+                                      endOfWeek!,
+                                    );
+                                    setState(
+                                      () {
+                                        dataTrainingPlan = null;
+                                      },
+                                    );
+                                  } catch (e) {
+                                    context.errorSnackBar(
+                                        "Erro ao importar treino: $e");
+                                  }
+                                },
                                 child: const Text("IMPORTAR",
                                     style: TextStyle(
                                         color: orange,
@@ -250,11 +264,12 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   "Repetições",
                   "Carga",
                   "Duração",
-                  if (exercisesState == ExercisesState.generatingTrain) "Dia"
+                  if (exercisesState == ExercisesState.generatingTrain || exercisesState==ExercisesState.updatingTrain) "Dia"
                 ];
-                if (exercisesState != ExercisesState.generatingTrain) {
+                if (exercisesState != ExercisesState.generatingTrain &&
+                    exercisesState != ExercisesState.updatingTrain) {
                   exercisesState = ExercisesState.withTrain;
-                } else {}
+                } 
                 final List<ModelExerciseDay> dayList = trainingPlan.exercises
                     .where((day) => day.day == selectedDay)
                     .toList();
@@ -497,7 +512,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               if (exercisesState ==
-                                  ExercisesState.generatingTrain)
+                                  ExercisesState.generatingTrain || exercisesState==ExercisesState.updatingTrain)
                                 _calculateWeekDay(trainingPlan, list, index)
                             ]);
                           },
@@ -538,14 +553,52 @@ class _ExercisesPageState extends State<ExercisesPage> {
                       borderRadius: BorderRadius.circular(10))),
                   maximumSize: const WidgetStatePropertyAll(Size(200, 50)),
                   backgroundColor: const WidgetStatePropertyAll(green)),
-              onPressed: () {},
+              onPressed: () async {
+                final response = await showBuildWeekTrainDialog(context,
+                    onConfirmed: (response) async {
+                  try {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    final trainingPlan =
+                        await ApiManager().generateCustomTrainWeek(
+                      response['goal'],
+                      response['fitnessLevel'],
+                      response['healthConditionsString'],
+                      response['preferencesString'],
+                      response['daysPerWeek'],
+                      response['sessionDuration'],
+                      response['planDurationWeeks'],
+                      response['customGoalsString'],
+                    );
+
+                    setState(() {
+                      dataTrainingPlan = Future.value(trainingPlan);
+                      exercisesState = ExercisesState.updatingTrain;
+                      isLoading = false;
+                    });
+                  } catch (e) {
+                    context.errorSnackBar("Erro ao gerar treino: $e");
+                    setState(() {
+                      isLoading = false;
+                    });
+                  } finally {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                });
+                if (response != null) {
+                  print(response);
+                }
+              },
               child: const Text(
                 "+ Mudar Exercício",
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               )),
         ];
-      case ExercisesState.generatingTrain:
+      case ExercisesState.generatingTrain || ExercisesState.updatingTrain:
         return [
           OutlinedButton(
               style: OutlinedButton.styleFrom(
@@ -574,7 +627,11 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   try {} catch (e) {
                     print("FUDEU");
                   }
-                  await ApiManager().saveTrainingPlan(trainingPlanWithDates);
+                  if(exercisesState == ExercisesState.generatingTrain) {
+                    await ApiManager().saveTrainingPlan(trainingPlanWithDates);
+                  } else {
+                    await ApiManager().updateTrainingPlan(trainingPlanWithDates);
+                  }
                   context.successSnackBar("Treino salvo com sucesso!");
                   setState(() {
                     exercisesState = ExercisesState.withTrain;
@@ -736,4 +793,5 @@ enum ExercisesState {
   withTrain,
   withoutTrain,
   generatingTrain,
+  updatingTrain,
 }
