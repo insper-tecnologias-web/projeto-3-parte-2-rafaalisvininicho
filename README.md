@@ -22,13 +22,13 @@ O projeto utiliza um sistema de rotas avançado, com navegação aninhada e guar
 
 ### Navegação Aninhada (Nested Navigation)
 
-A navegação aninhada permite que o aplicativo organize rotas relacionadas em "pilhas" de navegação dentro de uma rota principal, oferecendo uma estrutura mais intuitiva para o usuário. No caso do CPR Verde, a navegação aninhada é utilizada para organizar áreas principais do app, como a seção de exercícios, a tela inicial e a área de administração de usuários. Essa abordagem permite que o usuário navegue entre essas seções sem perder o contexto da aplicação, mantendo a navegação centralizada na barra principal, o que melhora a experiência e o fluxo.
+A navegação aninhada permite que o aplicativo organize rotas relacionadas em "pilhas" de navegação dentro de uma rota principal, oferecendo uma estrutura mais intuitiva para o usuário. No caso do NUTRAMOVE, a navegação aninhada é utilizada para organizar áreas principais do app, como a seção de exercícios, a tela inicial e a área de administração de usuários. Essa abordagem permite que o usuário navegue entre essas seções sem perder o contexto da aplicação, mantendo a navegação centralizada na barra principal, o que melhora a experiência e o fluxo.
 
 Por exemplo, dentro da rota principal do aplicativo, a barra de navegação exibe diferentes opções (como **Home**, **Exercises**, **Admin**), e cada uma delas pode ter sub-rotas específicas. Isso cria uma estrutura onde o usuário pode alternar entre diferentes partes da aplicação de forma eficiente e intuitiva, sem sair do escopo da navegação principal.
 
 ### Guards de Autenticação e Autorização
 
-Para garantir a segurança e a personalização no acesso, o CPR Verde utiliza **guards** para proteger rotas sensíveis. Existem dois tipos de guards implementados:
+Para garantir a segurança e a personalização no acesso, o NUTRAMOVE utiliza **guards** para proteger rotas sensíveis. Existem dois tipos de guards implementados:
 
 - **AuthGuard**: Esse guard garante que apenas usuários autenticados possam acessar determinadas rotas. Assim, o usuário precisa estar logado para acessar áreas como a tela de exercícios ou o perfil.
   
