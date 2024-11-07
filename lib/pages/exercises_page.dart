@@ -40,13 +40,17 @@ class _ExercisesPageState extends State<ExercisesPage> {
     return PadScaffold(
       title: "Exercícios",
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(
+            color: orange,
+          ))
           : FutureBuilder<ModelTrainingPlan?>(
               future: dataTrainingPlan ??=
                   ApiManager().getWeekTrainingPlan(startOfWeek!, endOfWeek!),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(
+                    color: orange,
+                  ));
                 }
                 if (snapshot.hasError) {
                   return Center(
@@ -256,7 +260,9 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   ).withPadding(const EdgeInsets.symmetric(horizontal: 20));
                 }
                 if (isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(
+                    color: orange,
+                  ));
                 }
                 final List<String> headerRow = [
                   "Exercício",
