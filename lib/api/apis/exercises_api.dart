@@ -51,6 +51,7 @@ extension ExercisesApi on ApiManager {
         {
           'start_date': startDate.toIso8601String(),
           'end_date': endDate.toIso8601String(),
+          'user_id': Hive.box('userData').get('id'),
         },
       );
       return ModelTrainingPlan.fromJson(response);
