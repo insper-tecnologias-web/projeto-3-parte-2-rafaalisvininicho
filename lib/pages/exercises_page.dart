@@ -264,12 +264,14 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   "Repetições",
                   "Carga",
                   "Duração",
-                  if (exercisesState == ExercisesState.generatingTrain || exercisesState==ExercisesState.updatingTrain) "Dia"
+                  if (exercisesState == ExercisesState.generatingTrain ||
+                      exercisesState == ExercisesState.updatingTrain)
+                    "Dia"
                 ];
                 if (exercisesState != ExercisesState.generatingTrain &&
                     exercisesState != ExercisesState.updatingTrain) {
                   exercisesState = ExercisesState.withTrain;
-                } 
+                }
                 final List<ModelExerciseDay> dayList = trainingPlan.exercises
                     .where((day) => day.day == selectedDay)
                     .toList();
@@ -512,7 +514,9 @@ class _ExercisesPageState extends State<ExercisesPage> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               if (exercisesState ==
-                                  ExercisesState.generatingTrain || exercisesState==ExercisesState.updatingTrain)
+                                      ExercisesState.generatingTrain ||
+                                  exercisesState ==
+                                      ExercisesState.updatingTrain)
                                 _calculateWeekDay(trainingPlan, list, index)
                             ]);
                           },
@@ -606,7 +610,13 @@ class _ExercisesPageState extends State<ExercisesPage> {
                       borderRadius: BorderRadius.circular(10)),
                   maximumSize: const Size(200, 50),
                   side: const BorderSide(color: orange)),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  exercisesState = ExercisesState.withTrain;
+                  dataTrainingPlan = ApiManager()
+                      .getWeekTrainingPlan(startOfWeek!, endOfWeek!);
+                });
+              },
               child: const Text("Cancelar", style: TextStyle(color: orange))),
           FilledButton(
               style: ButtonStyle(
@@ -627,10 +637,11 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   try {} catch (e) {
                     print("FUDEU");
                   }
-                  if(exercisesState == ExercisesState.generatingTrain) {
+                  if (exercisesState == ExercisesState.generatingTrain) {
                     await ApiManager().saveTrainingPlan(trainingPlanWithDates);
                   } else {
-                    await ApiManager().updateTrainingPlan(trainingPlanWithDates);
+                    await ApiManager()
+                        .updateTrainingPlan(trainingPlanWithDates);
                   }
                   context.successSnackBar("Treino salvo com sucesso!");
                   setState(() {
