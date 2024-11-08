@@ -2,6 +2,12 @@
 
 Este é um projeto Flutter chamado **NUTRAMOVE**, desenvolvido para gerenciar e monitorar rotinas de exercícios físicos. Ele utiliza navegação estruturada e personalizada, autenticação de usuários e algumas ferramentas populares no Flutter para aprimorar a experiência do usuário.
 
+# Projeto de Design - Figma
+
+### Link do Figma
+[Acessar o Design no Figma](https://www.figma.com/design/nr8V3CkAV8erHM7HsPDkUg/Untitled?node-id=22-412&node-type=frame&t=3Qt4TGS3C29B9j52-0)
+
+
 ## Tecnologias Utilizadas
 
 ### 1. Flutter
