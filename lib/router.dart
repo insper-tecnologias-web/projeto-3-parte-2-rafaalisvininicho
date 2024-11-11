@@ -29,5 +29,6 @@ class AppRouter extends RootStackRouter {
                   guards: [AuthGuard(), AdminGuard()])
             ]),
         CustomRoute(page: LoginRoute.page, path: '/login'),
+        CustomRoute(page: SignUpRoute.page, path: '/signup'),
       ];
 }

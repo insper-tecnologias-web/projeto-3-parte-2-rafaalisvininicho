@@ -30,4 +30,27 @@ extension AuthApi on ApiManager {
     // Notifica os ouvintes sobre a mudança de estado
   }
   
+  // Método para registro
+  Future<dynamic> register(String nome, String email, String password) async {
+    try {
+      final response = await post('auth/register/', {
+        'username': nome,
+        'email': email,
+        'password': password,
+        'role': 'user',
+      });
+      _isAuthenticated = true;
+      print(response);
+      print("Registro realizado com sucesso!");
+      final user = ModelUser.fromLoginJson(response);
+      print(user.toJson());
+      Hive.box('userData').put('id', user.id);
+      Hive.box('userData').put('username', user.username);
+      Hive.box('userData').put('email', user.email);
+      Hive.box("userData").put("role", user.role);
+      return response;
+    } catch (error) {
+      throw Exception('Erro ao fazer registro: $error');
+    }
+  }
 }

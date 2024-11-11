@@ -87,6 +87,17 @@ class LoginPage extends StatelessWidget {
                             validator: Validator.validatePassword,
                           ),
                           const SizedBox(height: 16.0),
+                          TextButton(
+                            onPressed: () {
+                              context.router.replace(const SignUpRoute());
+                            }, 
+                            child: Text(
+                              'Não tem uma conta? Cadastre-se',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.primaryColor,
+                              ),
+                            ),
+                            ),
                           FilledButton(
                             onPressed: _handleFormSubmmision,
                             child: Text(
