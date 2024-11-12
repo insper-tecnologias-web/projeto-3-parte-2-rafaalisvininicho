@@ -14,7 +14,6 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final key = GlobalKey<FormState>();
     final emailController = TextEditingController();
-    final nameController = TextEditingController();
     final usernameController = TextEditingController();
     final passwordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
@@ -25,7 +24,7 @@ class SignUpPage extends StatelessWidget {
     if (key.currentState!.validate()) {
       try {
         await ApiManager()
-            .register(nameController.text, usernameController.text, emailController.text, passwordController.text)
+            .register(usernameController.text, emailController.text, passwordController.text)
             .then((_) => {
                   context.successSnackBar('Usuário cadastrado com sucesso!'),
                   ApiManager()
@@ -73,16 +72,9 @@ class SignUpPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
-                            controller: nameController,
-                            decoration: const InputDecoration(
-                              labelText: 'Nome',
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
                             controller: usernameController,
                             decoration: const InputDecoration(
-                              labelText: 'Usuário',
+                              labelText: 'Nome',
                             ),
                           ),
                           const SizedBox(height: 16),
