@@ -7,37 +7,17 @@ import 'package:projeto/validators.dart';
 import 'package:projeto/api/api_manager.dart';
 
 @RoutePage()
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
-
-  @override
-  _SignUpPageState createState() => _SignUpPageState();
-}
-
-class _SignUpPageState extends State<SignUpPage> {
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  bool _isPasswordVisible = false;
-  bool _passwordsMatch = true;
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
-  }
-
-  void _checkPasswordsMatch() {
-    setState(() {
-      _passwordsMatch = _passwordController.text == _confirmPasswordController.text;
-    });
-  }
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final usernameController = TextEditingController();
     final key = GlobalKey<FormState>();
+    final emailController = TextEditingController();
+    final usernameController = TextEditingController();
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+    final theme = Theme.of(context);
 
     void _handleFormSubmmision() async {
     TextInput.finishAutofillContext();
@@ -47,10 +27,12 @@ class _SignUpPageState extends State<SignUpPage> {
             .register(usernameController.text, emailController.text, passwordController.text)
             .then((_) => {
                   context.successSnackBar('Usuário cadastrado com sucesso!'),
-                  ApiManager().login(emailController.text, passwordController.text).then((_) => {
-                    context.router.replace(const HomeRoute())
-                  })
-                });
+                  ApiManager()
+                    .login(emailController.text, passwordController.text)
+                    .then((_) => {
+                          context.successSnackBar('Login realizado com sucesso!'),
+                          context.router.replace(const HomeRoute())
+                        })});
       } catch (error) {
         context.errorSnackBar('Erro ao se cadastrar', description: error.toString());
       }
@@ -96,6 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
+                            controller: emailController,
                             autovalidateMode: AutovalidateMode.onUserInteraction,
                             decoration: const InputDecoration(
                               labelText: 'Email',
@@ -104,35 +87,25 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
-                            controller: _passwordController,
-                            obscureText: !_isPasswordVisible,
-                            decoration: InputDecoration(
+                            controller: passwordController,
+                            decoration: const InputDecoration(
                               labelText: 'Senha',
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                ),
-                                onPressed: _togglePasswordVisibility,
-                              ),
-                            ),
-                            // onChanged: (_) => _checkPasswordsMatch(),
+                            )
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
-                            controller: _confirmPasswordController,
-                            obscureText: !_isPasswordVisible,
-                            decoration: InputDecoration(
-                              labelText: 'Confirmar Senha',
-                              errorText: _passwordsMatch ? null : 'As senhas não coincidem',
-                            ),
-                            onChanged: (_) => _checkPasswordsMatch(),
+                            controller: confirmPasswordController,
+                            decoration: const InputDecoration(labelText: 'Confirmar Senha'),
                           ),
                           const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: _passwordsMatch ? () {
-                              _handleFormSubmmision();
-                            } : null,
-                            child: const Text('Cadastrar'),
+                          FilledButton(
+                            onPressed: _handleFormSubmmision,
+                            child: Text(
+                              'Cadastrar',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       ),
