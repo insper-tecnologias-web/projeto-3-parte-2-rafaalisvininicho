@@ -31,10 +31,11 @@ extension AuthApi on ApiManager {
   }
   
   // Método para registro
-  Future<dynamic> register(String nome, String email, String password) async {
+  Future<dynamic> register(String nome, String username, String email, String password) async {
     try {
       final response = await post('auth/register/', {
-        'username': nome,
+        'nome': nome,
+        'username': username,
         'email': email,
         'password': password,
         'role': 'user',
