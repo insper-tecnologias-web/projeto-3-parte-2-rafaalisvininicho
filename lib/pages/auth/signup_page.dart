@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,7 +47,9 @@ class _SignUpPageState extends State<SignUpPage> {
             .register(usernameController.text, emailController.text, passwordController.text)
             .then((_) => {
                   context.successSnackBar('Usuário cadastrado com sucesso!'),
-                  context.router.replace(const HomeRoute())
+                  ApiManager().login(emailController.text, passwordController.text).then((_) => {
+                    context.router.replace(const HomeRoute())
+                  })
                 });
       } catch (error) {
         context.errorSnackBar('Erro ao se cadastrar', description: error.toString());
@@ -114,7 +115,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 onPressed: _togglePasswordVisibility,
                               ),
                             ),
-                            onChanged: (_) => _checkPasswordsMatch(),
+                            // onChanged: (_) => _checkPasswordsMatch(),
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
