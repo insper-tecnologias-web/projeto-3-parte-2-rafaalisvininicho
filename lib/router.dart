@@ -24,6 +24,10 @@ class AppRouter extends RootStackRouter {
                   path: 'exercises',
                   guards: [AuthGuard()]),
               CustomRoute(
+                  page: HealthyMenuRoute.page,
+                  path: 'healthymenu',
+                  guards: [AuthGuard()]),
+              CustomRoute(
                   page: UsersRoute.page,
                   path: 'admin/users',
                   guards: [AuthGuard(), AdminGuard()])

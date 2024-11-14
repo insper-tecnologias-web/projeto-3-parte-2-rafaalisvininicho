@@ -37,6 +37,13 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
     ),
     (
       allowedRoles: ['admin', 'user'],
+      label: 'Menu Saudável',
+      routeBuilder: () => const HealthyMenuRoute(),
+      icon: const Icon(Icons.restaurant, color: grey),
+      selectedIcon: const Icon(Icons.restaurant, color: orange),
+    ),
+    (
+      allowedRoles: ['admin', 'user'],
       label: 'Exercícios',
       routeBuilder: () => const ExercisesRoute(),
       icon: const Icon(Icons.fitness_center, color: grey),
