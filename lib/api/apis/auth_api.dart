@@ -39,11 +39,11 @@ extension AuthApi on ApiManager {
         'password': password,
         'role': 'user',
       });
+      final loginResponse = await login(email, password);
       _isAuthenticated = true;
-      print(response);
       print("Registro realizado com sucesso!");
-      final user = ModelUser.fromLoginJson(response);
-      print(user.toJson());
+      print(ModelUser.fromSignUpJson(loginResponse));
+      final user = ModelUser.fromSignUpJson(loginResponse);
       Hive.box('userData').put('id', user.id);
       Hive.box('userData').put('username', user.username);
       Hive.box('userData').put('email', user.email);

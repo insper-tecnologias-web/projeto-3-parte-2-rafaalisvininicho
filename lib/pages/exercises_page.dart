@@ -233,8 +233,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                                     side: const BorderSide(color: orange)),
                                 onPressed: () async {
                                   try {
-                                    final reponse =
-                                        await ApiManager().importTraininPlan(
+                                    await ApiManager().importTraininPlan(
                                       startOfWeek!,
                                       endOfWeek!,
                                     );

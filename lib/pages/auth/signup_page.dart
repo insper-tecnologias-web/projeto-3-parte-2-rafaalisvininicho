@@ -26,14 +26,17 @@ class SignUpPage extends StatelessWidget {
         await ApiManager()
             .register(usernameController.text, emailController.text, passwordController.text)
             .then((_) => {
+              print("Fudeu"),
                   context.successSnackBar('Usuário cadastrado com sucesso!'),
                   ApiManager()
                     .login(emailController.text, passwordController.text)
                     .then((_) => {
+                      print("f0de8n"),
                           context.successSnackBar('Login realizado com sucesso!'),
                           context.router.replace(const HomeRoute())
                         })});
       } catch (error) {
+        print(error);
         context.errorSnackBar('Erro ao se cadastrar', description: error.toString());
       }
     }

@@ -29,7 +29,16 @@ class ModelUser {
     print(json);
     return ModelUser(
       id: json['id'],
-      username: utf8.decode(json['username'].codeUnits),
+      username: utf8.decode((json['username']).codeUnits),
+      role: json["role"],
+      email: json['email'],
+    );
+  }
+  factory ModelUser.fromSignUpJson(Map<String, dynamic> json) {
+    print(json);
+    return ModelUser(
+      id: json['id'],
+      username: json['username'],
       role: json["role"],
       email: json['email'],
     );
