@@ -1,66 +1,100 @@
-class ModelRecipe {
-  final String id;
-  final String title;
-  final String url;
-  final String imageUrl;
-  final String ingredients;
-  final String preparationSteps;
-  final double calorie;
-  final double protein;
-  final double fat;
-  final double carbs;
-  final DateTime consumedAt;
-  final bool wasConsumed;
-  final String mealType;
+import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:projeto/api/models/model_exercise.dart';
+import 'dart:convert';
 
-  ModelRecipe({
-    required this.id,
-    required this.title,
-    required this.url,
-    required this.imageUrl,
-    required this.ingredients,
-    required this.preparationSteps,
-    required this.calorie,
-    required this.protein,
-    required this.fat,
-    required this.carbs,
-    required this.consumedAt,
-    required this.wasConsumed,
-    required this.mealType,
-  });
+import 'package:projeto/api/models/model_user.dart';
 
-  factory ModelRecipe.fromJson(Map<String, dynamic> json) {
-    return ModelRecipe(
-      id: json['id'],
-      title: json['title'],
-      url: json['url'],
-      imageUrl: json['image_url'],
-      ingredients: json['ingredients'],
-      preparationSteps: json['preparation_steps'],
-      calorie: json['calorie'],
-      protein: json['protein'],
-      fat: json['fat'],
-      carbs: json['carbs'],
-      consumedAt: DateTime.parse(json['consumed_at']),
-      wasConsumed: json['was_consumed'],
-      mealType: json['meal_type'],
-    );
+part 'apis/auth_api.dart';
+part 'apis/users_api.dart';
+part 'apis/exercises_api.dart';
+
+class ApiManager extends ChangeNotifier {
+  ApiManager._internal();
+  static final ApiManager _instance = ApiManager._internal();
+  factory ApiManager() {
+    return _instance;
+  }
+  final String _baseUrl = 'http://127.0.0.1:8000/';
+  BuildContext? navigationContext;
+
+  bool _isAuthenticated = false; // Estado de autenticação
+
+  bool get isAuthenticated => _isAuthenticated; // Getter para o estado
+
+  Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl$endpoint'),
+        headers: {
+          'Content-Type': 'application/json',
+          ...?headers,
+        },
+      );
+      return _handleResponse(response);
+    } catch (error) {
+      throw Exception('Erro na requisição GET: $error');
+    }
   }
 
-    Map<String, dynamic> toJson() {
-    return{
-      'title': title,
-      'url': url,
-      'image_url': imageUrl,
-      'ingredients': ingredients,
-      'preparation_steps': preparationSteps,
-      'calorie': calorie,
-      'protein': protein,
-      'fat': fat,
-      'carbs': carbs,
-      'consumed_at': consumedAt,
-      'was_consumed': wasConsumed,
-      'meal_type': mealType,
-    };
+  Future<dynamic> post(String endpoint, dynamic body,
+      {Map<String, String>? headers}) async {
+    try {
+      endpoint = endpoint.replaceFirst(RegExp(r'^/'), '');
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endpoint'),
+        headers: {
+          'Content-Type': 'application/json',
+          ...?headers,
+        },
+        body: jsonEncode(body),
+      );
+      return _handleResponse(response);
+    } catch (error) {
+      throw Exception('Erro na requisição POST: $error');
+    }
+  }
+
+  Future<dynamic> put(String endpoint, dynamic body,
+      {Map<String, String>? headers}) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$_baseUrl$endpoint'),
+        headers: {
+          'Content-Type': 'application/json',
+          ...?headers,
+        },
+        body: jsonEncode(body),
+      );
+      return _handleResponse(response);
+    } catch (error) {
+      throw Exception('Erro na requisição PUT: $error');
+    }
+  }
+
+  Future<dynamic> delete(String endpoint,
+      {Map<String, String>? headers}) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('$_baseUrl$endpoint'),
+        headers: {
+          'Content-Type': 'application/json',
+          ...?headers,
+        },
+      );
+      return _handleResponse(response);
+    } catch (error) {
+      throw Exception('Erro na requisição DELETE: $error');
+    }
+  }
+
+  dynamic _handleResponse(http.Response response) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+          'Erro na API (Status: ${response.statusCode}): ${response.body}');
+    }
   }
 }
