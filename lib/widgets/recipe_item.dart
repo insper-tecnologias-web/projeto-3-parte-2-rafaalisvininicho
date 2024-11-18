@@ -1,101 +1,117 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:projeto/colors.dart';
-import 'package:projeto/extensions.dart';
+import 'model_recipe.dart';
 
-class PadScaffold extends StatelessWidget {
-  const PadScaffold(
-      {super.key,
-      required this.body,
-      this.title = "",
-      this.subtitle = "",
-      this.actions});
-  final Widget body;
-  final String title;
-  final String subtitle;
-  final Widget? actions;
+class RecipeItem extends StatelessWidget {
+  final ModelRecipe recipe; // Modelo passado diretamente para o item
+  final VoidCallback onAdd; // Função para o botão de adicionar
+
+  const RecipeItem({
+    Key? key,
+    required this.recipe,
+    required this.onAdd,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final username = Hive.box("userData").get("username") ?? "";
-    final isAdm = Hive.box("userData").get("role") == "admin" ? true : false;
-    return Scaffold(
-      backgroundColor: beige,
-      body: Row(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Imagem da refeição
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.network(
+              recipe.imageUrl,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(width: 16),
+          // Informação do card
           Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Tipo da refeição
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade200,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Text(
+                        recipe.mealType,
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // Título da receita
+                Text(
+                  recipe.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // Informações nutricionais
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24),
-                        ),
-                        Text(
-                          subtitle,
-                          style: const TextStyle(color: grey, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    if (actions != null) actions!,
-                    if (actions == null) const SizedBox(width: 16),
+                    Text('${recipe.calorie.toInt()} kcal'),
+                    Text('${recipe.carbs.toInt()}g carb'),
+                    Text('${recipe.protein.toInt()}g proteínas'),
+                    Text('${recipe.fat.toInt()}g gorduras'),
                   ],
-                ).withPadding(
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(child: body),
                 ),
               ],
             ),
           ),
-          Container(
-              color: Colors.white,
-              width: 324,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            username,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24),
-                          ),
-                          Text(
-                            isAdm ? "Administrador" : "Usuário",
-                            style: const TextStyle(color: grey, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 16),
-                        constraints: const BoxConstraints(
-                          minWidth: 40,
-                          minHeight: 40,
-                        ),
-                        decoration: BoxDecoration(
-                          color: green.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Icon(
-                          Icons.person_outlined,
-                          color: orange,
-                        ),
-                      ),
-                    ],
+          const SizedBox(width: 16),
+          // Botão de adicionar e saúde
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Consumido? ${recipe.wasConsumed ? "Sim" : "Não"}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: onAdd,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightGreen,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                ],
-              ).withPadding(
-                const EdgeInsets.all(16),
-              )),
+                ),
+                child: const Text('Adicionar'),
+              ),
+            ],
+          ),
         ],
       ),
     );
