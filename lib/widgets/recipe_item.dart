@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'model_recipe.dart';
+import 'package:projeto/api/models/model_recipe.dart';
 
 class RecipeItem extends StatelessWidget {
   final ModelRecipe recipe; // Modelo passado diretamente para o item
