@@ -7,6 +7,27 @@ Este é um projeto Flutter chamado **NUTRAMOVE**, desenvolvido para gerenciar e 
 ### Link do Figma
 [Acessar o Design no Figma](https://www.figma.com/design/nr8V3CkAV8erHM7HsPDkUg/Untitled?node-id=22-412&node-type=frame&t=3Qt4TGS3C29B9j52-0)
 
+# Como Rodar um Projeto Flutter no VS Code Após Clonar o Repositório
+
+Este guia ensina como configurar e executar um projeto Flutter clonado usando o Visual Studio Code.
+
+---
+
+## 1. Abra o Repositório no VS Code
+1. Abra o **Visual Studio Code**.
+2. Vá em **File > Open Folder** e selecione a pasta onde o repositório foi clonado.
+
+---
+
+## 2. Instale as Dependências do Projeto
+Abra o terminal no VS Code (use o atalho `Ctrl + `` ` ou acesse **View > Terminal**) e execute o comando:
+
+```
+flutter pub get
+```
+
+## 3. Execute o Projeto
+Clique em Run and Debug (ctrl + shift + D) e selecione a opção para rodar no Flutter Chrome
 
 ## Tecnologias Utilizadas
 
