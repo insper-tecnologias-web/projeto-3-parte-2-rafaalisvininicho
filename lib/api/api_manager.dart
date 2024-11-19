@@ -18,7 +18,7 @@ class ApiManager extends ChangeNotifier {
   factory ApiManager() {
     return _instance;
   }
-  final String _baseUrl = 'http://127.0.0.1:8000/';
+  final String _baseUrl = 'https://projeto-3-rafaalisvininicho.onrender.com';
   BuildContext? navigationContext;
 
   bool _isAuthenticated = false; // Estado de autenticação
