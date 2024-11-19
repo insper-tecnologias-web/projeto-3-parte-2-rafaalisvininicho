@@ -53,49 +53,49 @@ class PadScaffold extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-              color: Colors.white,
-              width: 324,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            username,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24),
-                          ),
-                          Text(
-                            isAdm ? "Administrador" : "Usuário",
-                            style: const TextStyle(color: grey, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 16),
-                        constraints: const BoxConstraints(
-                          minWidth: 40,
-                          minHeight: 40,
-                        ),
-                        decoration: BoxDecoration(
-                          color: green.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Icon(
-                          Icons.person_outlined,
-                          color: orange,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ).withPadding(
-                const EdgeInsets.all(16),
-              )),
+          // Container(
+          //     color: Colors.white,
+          //     width: 324,
+          //     child: Column(
+          //       children: [
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           children: [
+          //             Column(
+          //               crossAxisAlignment: CrossAxisAlignment.start,
+          //               children: [
+          //                 Text(
+          //                   username,
+          //                   style: const TextStyle(
+          //                       fontWeight: FontWeight.bold, fontSize: 24),
+          //                 ),
+          //                 Text(
+          //                   isAdm ? "Administrador" : "Usuário",
+          //                   style: const TextStyle(color: grey, fontSize: 12),
+          //                 ),
+          //               ],
+          //             ),
+          //             Container(
+          //               margin: const EdgeInsets.only(left: 16),
+          //               constraints: const BoxConstraints(
+          //                 minWidth: 40,
+          //                 minHeight: 40,
+          //               ),
+          //               decoration: BoxDecoration(
+          //                 color: green.withOpacity(0.2),
+          //                 borderRadius: BorderRadius.circular(16),
+          //               ),
+          //               child: const Icon(
+          //                 Icons.person_outlined,
+          //                 color: orange,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ],
+          //     ).withPadding(
+          //       const EdgeInsets.all(16),
+          //     )),
         ],
       ),
     );

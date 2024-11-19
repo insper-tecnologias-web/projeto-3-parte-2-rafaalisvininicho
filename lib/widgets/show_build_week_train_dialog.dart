@@ -3,7 +3,7 @@ import 'package:projeto/widgets/pop_up_builder.dart';
 
 Future<dynamic> showBuildWeekTrainDialog(BuildContext context,
     {required Function onConfirmed}) {
-  final _metaController = TextEditingController();
+  final metaController = TextEditingController();
   final _focusController = TextEditingController();
   final _problemaController = TextEditingController();
   final _customGoalsController = TextEditingController();
@@ -29,7 +29,7 @@ Future<dynamic> showBuildWeekTrainDialog(BuildContext context,
                 children: [
                   const Text('Qual sua meta fitness?'),
                   TextFormField(
-                    controller: _metaController,
+                    controller: metaController,
                     decoration: const InputDecoration(
                       hintText: 'Ex: Emagrecer, Ganhar massa muscular, etc',
                     ),
@@ -166,7 +166,7 @@ Future<dynamic> showBuildWeekTrainDialog(BuildContext context,
     ],
     onConfirmed: () async {
       await onConfirmed({
-        'goal': _metaController.text,
+        'goal': metaController.text,
         'fitnessLevel': _focusController.text,
         'healthConditionsString': _problemaController.text,
         'preferencesString': '',

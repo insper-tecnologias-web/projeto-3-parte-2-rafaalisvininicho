@@ -80,6 +80,7 @@ class LoginPage extends StatelessWidget {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             controller: passwordController,
+                            obscureText: true,
                             decoration: const InputDecoration(
                               labelText: 'Senha',
                               hintText: 'Digite sua senha',

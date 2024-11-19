@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto/extensions.dart';
 import 'package:projeto/widgets/pad_scaffold.dart';
 import 'package:projeto/api/models/model_recipe.dart';
 import 'package:projeto/api/api_manager.dart';
@@ -7,7 +8,7 @@ import 'package:projeto/widgets/recipe_item.dart';
 
 
 class HealthyMenuPage extends StatefulWidget {
-  const HealthyMenuPage({Key? key}) : super(key: key);
+  const HealthyMenuPage({super.key});
 
   @override
   State<HealthyMenuPage> createState() => _HealthyMenuPageState();
@@ -43,14 +44,10 @@ class _HealthyMenuPageState extends State<HealthyMenuPage> {
   Future<void> _addRecipe(String recipeId) async {
     try {
       await ApiManager().addRecipe(recipeId);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Receita adicionada com sucesso!')),
-      );
+      context.successSnackBar('Receita adicionada com sucesso!');
     } catch (e) {
       print('Erro ao adicionar receita: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro ao adicionar receita.')),
-      );
+      context.errorSnackBar('Erro ao adicionar receita.');
     }
   }
 

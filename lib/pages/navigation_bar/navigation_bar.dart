@@ -25,23 +25,23 @@ class NavigationBarPage extends StatefulWidget {
 
 class _NavigationBarPageState extends State<NavigationBarPage> {
   static final List<PageData> _pages = [
-    (
-      allowedRoles: ['admin', 'user'],
-      label: 'Home',
-      routeBuilder: () => const HomeRoute(),
-      icon: const Icon(Icons.home, color: grey),
-      selectedIcon: const Icon(
-        Icons.home,
-        color: orange,
-      )
-    ),
-    (
-      allowedRoles: ['admin', 'user'],
-      label: 'Menu Saudável',
-      routeBuilder: () => const HealthyMenuRoute(),
-      icon: const Icon(Icons.restaurant, color: grey),
-      selectedIcon: const Icon(Icons.restaurant, color: orange),
-    ),
+    // (
+    //   allowedRoles: ['admin', 'user'],
+    //   label: 'Home',
+    //   routeBuilder: () => const HomeRoute(),
+    //   icon: const Icon(Icons.home, color: grey),
+    //   selectedIcon: const Icon(
+    //     Icons.home,
+    //     color: orange,
+    //   )
+    // ),
+    // (
+    //   allowedRoles: ['admin', 'user'],
+    //   label: 'Menu Saudável',
+    //   routeBuilder: () => const HealthyMenuRoute(),
+    //   icon: const Icon(Icons.restaurant, color: grey),
+    //   selectedIcon: const Icon(Icons.restaurant, color: orange),
+    // ),
     (
       allowedRoles: ['admin', 'user'],
       label: 'Exercícios',
